@@ -1,31 +1,54 @@
-https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii
+//https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+*/
+
 class Solution {
 public:
+    Node* connect(Node* root) {
+        queue<Node*> q;
+        if(root){
+            q.push(root);
+        }
 
-    int func(TreeNode* root){
-        if(!root) return 0;
-        if(root->left == NULL and root->right == NULL) return 1;
+        while(!q.empty()){
+            int sz = q.size();
+            Node* prevNode = NULL;
+            for(int i = 0; i<sz; i++){
+                auto fr = q.front();
+                q.pop();
+                
+                Node* node = fr;
+                if(prevNode){
+                    prevNode -> next = node;
+                }
+                prevNode = node;
 
-        int h1 = 2e9, h2 = 2e9;
-        if(root->left) h1 = func(root->left);
-        if(root->right) h2 = func(root->right);
+                if(node->left){
+                    q.push(node->left);
+                }
 
-        return min(h1, h2) + 1;
-    }
+                if(node->right){
+                    q.push(node->right);
+                }
+            }
+        }
 
-    int minDepth(TreeNode* root) {
-        return func(root);
+        return root;
     }
 };
